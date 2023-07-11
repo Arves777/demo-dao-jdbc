@@ -18,7 +18,12 @@ public class Progam {
         System.out.println("\n### TEST 1: seller findByDepartment ###");
         Department department = new Department(2,null);
         List<Seller> listSeller = sellerDao.findByDepartment(department);
+        for(Seller s: listSeller){
+            System.out.println(s);
+        }
         
+        System.out.println("\n### TEST 1: seller findAll ###");
+        listSeller = sellerDao.findAll();
         for(Seller s: listSeller){
             System.out.println(s);
         }
