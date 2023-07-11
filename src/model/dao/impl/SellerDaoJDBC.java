@@ -13,6 +13,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.entities.Department;
 public class SellerDaoJDBC implements SellerDao {
     private Connection conn = null;
@@ -70,7 +72,38 @@ public class SellerDaoJDBC implements SellerDao {
 
     @Override
     public List<Seller> findAll() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        PreparedStatement st = null;
+       ResultSet rs = null;
+       
+       try{
+           st = conn.prepareStatement(
+                   "SELECT seller.*,department.Name as DepName\n" +
+                    " FROM seller INNER JOIN department\n" +
+                    " ON seller.DepartmentId = department.Id\n" +
+                    " ORDER BY Name");
+           rs = st.executeQuery();
+           
+           List<Seller> listSeller = new ArrayList<>();
+           Map<Integer,Department> mapDep = new HashMap<>();
+           
+           while(rs.next()){
+               Department dep = mapDep.get(rs.getInt("DepartmentId"));
+               
+               if(dep == null){
+                   dep = instantiateDepartment(rs);
+                   mapDep.put(rs.getInt("DepartmentId"),dep);
+               }
+               
+               Seller seller = instantiateSeller(rs, dep);
+               listSeller.add(seller);
+           }
+           
+           return listSeller;
+           
+           
+       } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }
     }
 
     private Department instantiateDepartment(ResultSet rs) throws SQLException {
