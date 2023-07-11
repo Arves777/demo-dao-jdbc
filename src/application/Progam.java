@@ -1,5 +1,6 @@
 package application;
 
+import java.util.List;
 import model.dao.DaoFactory;
 import model.dao.SellerDao;
 import model.entities.Department;
@@ -7,10 +8,20 @@ import model.entities.Seller;
 
 public class Progam {
     public static void main(String[] args){
-        Department department = new Department(1,"Games");
         
         SellerDao sellerDao = DaoFactory.createSellerDao();
+        
+        System.out.println("### TEST 1: seller findByID ###");
         Seller seller = sellerDao.findById(3);
         System.out.println(seller);
+        
+        System.out.println("\n### TEST 1: seller findByDepartment ###");
+        Department department = new Department(2,null);
+        List<Seller> listSeller = sellerDao.findByDepartment(department);
+        
+        for(Seller s: listSeller){
+            System.out.println(s);
+        }
+                
     }
 }
