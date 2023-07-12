@@ -33,6 +33,12 @@ public class Progam {
         Seller seller2 = new Seller(null,"Antonio","Antonio@outlook.com",new Date(),6000.00,department);
         sellerDao.insert(seller2);
         System.out.println("Inserted! New id = " + seller2.getId());
+        
+        System.out.println("\n### TEST 5: seller update ###");
+        seller = sellerDao.findById(1);
+        seller.setName("Pedrin");
+        sellerDao.update(seller);
+        System.out.println("update completed!");
                 
     }
 }
